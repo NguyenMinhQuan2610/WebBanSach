@@ -1,0 +1,68 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Customer.master.cs" Inherits="WebBanSach.Customer" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>BookStore Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <asp:ContentPlaceHolder ID="head" runat="server"></asp:ContentPlaceHolder>
+    <style>
+        .navbar-dark.bg-dark-custom {
+            background-color: #212529;
+        }
+
+        .section-title {
+            background-color: #90ee90;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2d5a27;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark-custom mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="#">BookStore Online</a>
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link active" href="#">TRANG CHỦ</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">DANH MỤC SÁCH
+                            </a>
+                            <ul class="dropdown-menu">
+                                <asp:Repeater ID="rptChuDe" runat="server">
+                                    <ItemTemplate>
+                                        <li>
+                                            <a class="dropdown-item d-flex justify-content-between align-items-center"
+                                                href='Product.aspx?MaCD=<%# Eval("MaCD") %>'>
+                                                <%# Eval("Tenchude") %>
+                                                <span class="badge bg-secondary rounded-pill"><%# Eval("SoLuong") %></span>
+                                            </a>
+                                        </li>
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="#">Đăng nhập</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="bi bi-cart"></i>Giỏ hàng (0)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </form>
+</body>
+</html>
