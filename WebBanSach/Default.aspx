@@ -35,7 +35,7 @@
                                 <p class="card-text small mb-2">
                                     Giá bán: <span class="price-tag"><%# Eval("Dongia", "{0:N0}") %> đồng</span>
                                 </p>
-                                <a href='ChiTietSach.aspx?id=<%# Eval("MaSach") %>' class="btn btn-success btn-sm w-100">
+                                <a href='Details.aspx?id=<%# Eval("MaSach") %>' class="btn btn-success btn-sm w-100">
                                     Chi tiết
                                 </a>
                             </div>

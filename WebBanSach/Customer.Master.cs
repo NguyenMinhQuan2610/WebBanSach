@@ -38,5 +38,14 @@ namespace WebBanSach
                 rptChuDe.DataBind();
             }
         }
+        protected string GetCartCount()
+        {
+            if (Session["GioHang"] != null)
+            {
+                var gioHang = (List<WebBanSach.CartItem>)Session["GioHang"];
+                return gioHang.Count.ToString();
+            }
+            return "0";
+        }
     }
 }
