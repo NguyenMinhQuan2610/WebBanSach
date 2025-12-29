@@ -2,6 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Collections.Generic;
 
 namespace WebBanSach
 {
@@ -17,26 +18,67 @@ namespace WebBanSach
             }
         }
 
+        protected int totalPagesCount = 0;
+
         private void LoadSachMoi()
         {
+            int pageSize = 6;
+            int curPage = 1;
+            if (Request.QueryString["page"] != null)
+                curPage = int.Parse(Request.QueryString["page"]);
+
             using (SqlConnection con = new SqlConnection(strCon))
             {
-                string sql = "SELECT TOP 6 MaSach, TenSach, Dongia, AnhBia FROM Sach ORDER BY Ngaycapnhat DESC";
+                string sql = @"SELECT MaSach, TenSach, Dongia, AnhBia 
+                       FROM Sach 
+                       ORDER BY Ngaycapnhat DESC 
+                       OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY;
+                       
+                       SELECT COUNT(*) FROM Sach;";
 
-                SqlDataAdapter da = new SqlDataAdapter(sql, con);
-                DataTable dt = new DataTable();
+                SqlCommand cmd = new SqlCommand(sql, con);
+                cmd.Parameters.AddWithValue("@Offset", (curPage - 1) * pageSize);
+                cmd.Parameters.AddWithValue("@PageSize", pageSize);
 
-                try
-                {
-                    da.Fill(dt);
-                    rptSachMoi.DataSource = dt;
-                    rptSachMoi.DataBind();
-                }
-                catch (Exception ex)
-                {
-                    Response.Write("Lỗi kết nối dữ liệu: " + ex.Message);
-                }
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+
+                rptSachMoi.DataSource = ds.Tables[0];
+                rptSachMoi.DataBind();
+
+                int totalRows = int.Parse(ds.Tables[1].Rows[0][0].ToString());
+                totalPagesCount = (int)Math.Ceiling((double)totalRows / pageSize);
+
+                TaoPager(totalPagesCount, curPage);
             }
+        }
+        private void TaoPager(int totalPages, int curPage)
+        {
+            var pages = new List<object>();
+            for (int i = 1; i <= totalPages; i++)
+            {
+                pages.Add(new { PageIndex = i, PageText = i, Active = (i == curPage) });
+            }
+            rptPager.DataSource = pages;
+            rptPager.DataBind();
+        }
+        protected int GetPreviousPage()
+        {
+            int curPage = string.IsNullOrEmpty(Request.QueryString["page"]) ? 1 : int.Parse(Request.QueryString["page"]);
+            return curPage > 1 ? curPage - 1 : 1;
+        }
+
+        protected int GetNextPage()
+        {
+            int curPage = string.IsNullOrEmpty(Request.QueryString["page"]) ? 1 : int.Parse(Request.QueryString["page"]);
+            return curPage < totalPagesCount ? curPage + 1 : totalPagesCount;
+        }
+
+        protected bool IsLastPage()
+        {
+            int curPage = string.IsNullOrEmpty(Request.QueryString["page"]) ? 1 : int.Parse(Request.QueryString["page"]);
+            return curPage >= totalPagesCount;
         }
     }
 }

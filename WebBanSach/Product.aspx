@@ -20,7 +20,7 @@
                         <img src='<%# "Image/" + Eval("AnhBia") %>' style="width:150px; height:200px; object-fit:cover;" />
                         <h6 class="mt-2 text-primary text-truncate"><%# Eval("TenSach") %></h6>
                         <p>Giá bán: <span class="price"><%# Eval("Dongia", "{0:N0}") %> đồng</span></p>
-                        <a href='ChiTiet.aspx?MaSach=<%# Eval("MaSach") %>' class="btn btn-success btn-sm">Chi tiết</a>
+                        <a href='Details.aspx?id=<%# Eval("MaSach") %>' class="btn btn-success btn-sm">Chi tiết</a>
                     </div>
                 </div>
             </ItemTemplate>

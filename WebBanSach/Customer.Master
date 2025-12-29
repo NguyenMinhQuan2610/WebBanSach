@@ -28,7 +28,7 @@
                 <a class="navbar-brand" href="#">BookStore Online</a>
                 <div class="collapse navbar-collapse">
                     <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link active" href="#">TRANG CHỦ</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="Default.aspx">TRANG CHỦ</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-bs-toggle="dropdown">DANH MỤC SÁCH
                             </a>

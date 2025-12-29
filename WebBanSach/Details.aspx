@@ -21,4 +21,30 @@
             </div>
         </ItemTemplate>
     </asp:Repeater>
+    <hr />
+<div class="row mt-5">
+    <div class="col-12">
+        <h4 class="text-success border-bottom pb-2">SÁCH CÙNG CHỦ ĐỀ</h4>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-4 g-4 mt-2">
+    <asp:Repeater ID="rptSachCungChuDe" runat="server">
+        <ItemTemplate>
+            <div class="col">
+                <div class="card h-100 text-center shadow-sm">
+                    <div class="p-2">
+                        <img src='<%# "Image/" + Eval("AnhBia") %>' class="card-img-top mx-auto" 
+                             style="width: 100px; height: 140px; object-fit: cover;">
+                    </div>
+                    <div class="card-body p-2">
+                        <h6 class="card-title small fw-bold text-truncate"><%# Eval("TenSach") %></h6>
+                        <p class="card-text small text-danger fw-bold"><%# Eval("Dongia", "{0:N0}") %> đ</p>
+                        <a href='Details.aspx?id=<%# Eval("MaSach") %>' class="btn btn-outline-primary btn-sm w-100">Xem</a>
+                    </div>
+                </div>
+            </div>
+        </ItemTemplate>
+    </asp:Repeater>
+</div>
 </asp:Content>

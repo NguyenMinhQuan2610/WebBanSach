@@ -29,21 +29,49 @@ namespace WebBanSach
 
             using (SqlConnection con = new SqlConnection(strCon))
             {
-                string sql = @"SELECT S.*, N.TenNXB, T.TenTG 
-                               FROM Sach S 
-                               JOIN NhaXuatBan N ON S.MaNXB = N.MaNXB
-                               LEFT JOIN VietSach VS ON S.MaSach = VS.MaSach
-                               LEFT JOIN TacGia T ON VS.MaTG = T.MaTG
-                               WHERE S.MaSach = @MaSach";
+                string sqlChiTiet = @"SELECT S.*, N.TenNXB, T.TenTG 
+                              FROM Sach S 
+                              JOIN NhaXuatBan N ON S.MaNXB = N.MaNXB
+                              LEFT JOIN VietSach VS ON S.MaSach = VS.MaSach
+                              LEFT JOIN TacGia T ON VS.MaTG = T.MaTG
+                              WHERE S.MaSach = @MaSach";
 
-                SqlCommand cmd = new SqlCommand(sql, con);
+                SqlCommand cmd = new SqlCommand(sqlChiTiet, con);
                 cmd.Parameters.AddWithValue("@MaSach", maSach);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
-                rptChiTiet.DataSource = dt;
-                rptChiTiet.DataBind();
+                if (dt.Rows.Count > 0)
+                {
+                    rptChiTiet.DataSource = dt;
+                    rptChiTiet.DataBind();
+
+                    string maCD = dt.Rows[0]["MaCD"].ToString();
+                    LoadSachCungChuDe(maCD, maSach);
+                }
+            }
+        }
+
+        private void LoadSachCungChuDe(string maCD, string maSachHienTai)
+        {
+            using (SqlConnection con = new SqlConnection(strCon))
+            {
+                string sqlCungLoai = @"SELECT TOP 4 MaSach, TenSach, Dongia, AnhBia 
+                               FROM Sach 
+                               WHERE MaCD = @MaCD AND MaSach <> @MaSachHienTai
+                               ORDER BY NEWID()";
+
+                SqlCommand cmd = new SqlCommand(sqlCungLoai, con);
+                cmd.Parameters.AddWithValue("@MaCD", maCD);
+                cmd.Parameters.AddWithValue("@MaSachHienTai", maSachHienTai);
+
+                SqlDataAdapter da = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+
+                rptSachCungChuDe.DataSource = dt;
+                rptSachCungChuDe.DataBind();
             }
         }
 

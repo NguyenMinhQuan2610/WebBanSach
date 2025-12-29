@@ -2,10 +2,28 @@
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
-        .book-card { transition: transform 0.2s; border: 1px solid #eee; }
-        .book-card:hover { transform: translateY(-5px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .book-title { font-size: 0.95rem; font-weight: bold; color: #007bff; height: 3rem; overflow: hidden; }
-        .price-tag { color: #d9534f; font-weight: bold; }
+        .book-card {
+            transition: transform 0.2s;
+            border: 1px solid #eee;
+        }
+
+            .book-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            }
+
+        .book-title {
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #007bff;
+            height: 3rem;
+            overflow: hidden;
+        }
+
+        .price-tag {
+            color: #d9534f;
+            font-weight: bold;
+        }
     </style>
 </asp:Content>
 
@@ -13,7 +31,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="section-title d-flex align-items-center">
-                <i class="bi bi-grid-fill me-2"></i> SÁCH MỚI
+                <i class="bi bi-grid-fill me-2"></i>SÁCH MỚI
             </div>
         </div>
     </div>
@@ -24,10 +42,10 @@
                 <div class="col">
                     <div class="card h-100 text-center book-card">
                         <div class="p-3">
-                            <img src='<%# "Image/" + Eval("AnhBia") %>' 
-                                 class="card-img-top mx-auto" 
-                                 style="width: 150px; height: 210px; object-fit: cover;" 
-                                 alt='<%# Eval("TenSach") %>'>
+                            <img src='<%# "Image/" + Eval("AnhBia") %>'
+                                class="card-img-top mx-auto"
+                                style="width: 150px; height: 210px; object-fit: cover;"
+                                alt='<%# Eval("TenSach") %>'>
                         </div>
                         <div class="card-body d-flex flex-column">
                             <h6 class="book-title"><%# Eval("TenSach") %></h6>
@@ -35,8 +53,7 @@
                                 <p class="card-text small mb-2">
                                     Giá bán: <span class="price-tag"><%# Eval("Dongia", "{0:N0}") %> đồng</span>
                                 </p>
-                                <a href='Details.aspx?id=<%# Eval("MaSach") %>' class="btn btn-success btn-sm w-100">
-                                    Chi tiết
+                                <a href='Details.aspx?id=<%# Eval("MaSach") %>' class="btn btn-success btn-sm w-100">Chi tiết
                                 </a>
                             </div>
                         </div>
@@ -45,4 +62,34 @@
             </ItemTemplate>
         </asp:Repeater>
     </div>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <asp:Repeater ID="Repeater1" runat="server">
+            <ItemTemplate>
+            </ItemTemplate>
+        </asp:Repeater>
+    </div>
+
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item <%= (Request.QueryString["page"] == null || Request.QueryString["page"] == "1") ? "disabled" : "" %>">
+                <a class="page-link" href="Default.aspx?page=<%= GetPreviousPage() %>" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <asp:Repeater ID="rptPager" runat="server">
+                <ItemTemplate>
+                    <li class='<%# Eval("Active").ToString() == "True" ? "page-item active" : "page-item" %>'>
+                        <a class="page-link" href='Default.aspx?page=<%# Eval("PageIndex") %>'><%# Eval("PageText") %></a>
+                    </li>
+                </ItemTemplate>
+            </asp:Repeater>
+
+            <li class="page-item <%= IsLastPage() ? "disabled" : "" %>">
+                <a class="page-link" href="Default.aspx?page=<%= GetNextPage() %>" aria-label="Next">
+                    <span aria-hidden="true"> &raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </asp:Content>
